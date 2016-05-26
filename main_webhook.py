@@ -9,6 +9,7 @@ import tornado.web
 import tornado.ioloop
 import websocket_handler
 
+
 clr = 'clear'
 if os.name == 'nt':
    clr = 'cls'

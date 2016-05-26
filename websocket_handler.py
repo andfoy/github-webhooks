@@ -11,7 +11,10 @@ import tornado.escape
 import tornado.websocket
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
- 
+
+    def check_origin(self, origin):
+        return True
+
     def open(self, *args, **kwargs):
         # self.application.pc.add_event_listener(self)
         self._id = hashlib.md5(str(time.time())).hexdigest()[0:7] 

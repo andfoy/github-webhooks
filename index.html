@@ -347,15 +347,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/languages/bash.min.js" type="text/javascript"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-    <script>hljs.initHighlighting();</script>
     <script>
       $(document).ready(function() {
+        hljs.initHighlightingOnLoad();
+        hljs.initHighlighting();
         var ws = new WebSocket('ws://webhook.margffoy-tuay.com/log');
         ws.onmessage = function(str) {
            var div = $("#chat-win");
            var t = $("#code_pre").text();
-           $("#code_pre").text(t+str.data);
+           $("#code_pre").text(t+str.data+"\n");
            //$("#code_pre").addClass("sh");
            hljs.initHighlighting.called = false;
            hljs.initHighlighting();

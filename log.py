@@ -6,20 +6,21 @@ import json
 import tornado
 import subprocess
 import tornado.web
+from tornado.process import Subprocess
 
 class LogMonitor(object):
-	def __init__(self):
-		self.sockets = {}
-		filename = "./webhook.out"
-		self.proc = Subprocess(["tail", "-f", filename, "-n", "0"],
+    def __init__(self):
+        self.sockets = {}
+        filename = "./webhook.out"
+        self.proc = Subprocess(["tail", "-f", filename, "-n", "0"],
                                stdout=Subprocess.STREAM,
                                bufsize=1)
-		self.proc.set_exit_callback(self._close)
+        self.proc.set_exit_callback(self._close)
         self.proc.stdout.read_until("\n", self.write_line)
 
     @tornado.gen.coroutine
     def _close(self, *args, **kwargs):
-    	self.proc.proc.terminate()
+        self.proc.proc.terminate()
         self.proc.proc.wait()
 
     @tornado.gen.coroutine
