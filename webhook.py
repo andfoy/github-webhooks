@@ -3,7 +3,6 @@
 import os
 import sys
 import hmac
-import glob
 import hashlib
 import tornado.web
 import tornado.escape
@@ -30,7 +29,7 @@ class HookHandler(tornado.web.RequestHandler):
 
     @tornado.gen.coroutine
     def get(self):
-        self.write("Github Webhook Server is running")
+        self.render("index.html")
 
     @tornado.gen.coroutine
     def post(self):
