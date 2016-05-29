@@ -252,10 +252,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div>
         <div class="box-body">
         <div class="direct-chat-messages" id="chat-win">
-        <pre style="padding:0px"><code id="code_pre" class="python"></code></pre>
+        <pre style="padding:0px"><code id="code_pre" class="bash"></code></pre>
         </div>
         </div>
         </div>
+
+        <div class="box box-solid box-danger direct-chat direct-chat-danger">
+        <div class="box-header with-border">
+        <h3 class="box-title">Error Log</h3>
+        <div class="box-tools pull-right">
+      <span data-toggle="tooltip" title="3 New Messages" class="badge bg-green">3</span>
+      <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+      <!-- In box-tools add this button if you intend to use the contacts pane -->
+      <!-- <button class="btn btn-box-tool" data-toggle="tooltip" title="Contacts" data-widget="chat-pane-toggle"><i class="fa fa-comments"></i></button>
+ -->      <!-- <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button> -->
+    </div>
+        </div>
+        <div class="box-body">
+        <div class="direct-chat-messages" id="chat-win2">
+        <pre style="padding:0px"><code id="code_pre2" class="bash"></code></pre>
+        </div>
+        </div>
+        </div>
+
         </section><!-- /.content -->
       </div><!-- /.content-wrapper -->
 
@@ -353,9 +372,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
         hljs.initHighlighting();
         var ws = new WebSocket('ws://webhook.margffoy-tuay.com/log');
         ws.onmessage = function(str) {
+           //console.log(str);
+           var msg = JSON.parse(str.data);
            var div = $("#chat-win");
-           var t = $("#code_pre").text();
-           $("#code_pre").text(t+str.data+"\n");
+           var win = $("#code_pre");
+           if(msg.type === 'err')
+           {
+               div = $("#chat-win2");
+               win = $("#code_pre2");
+           }
+           win.text(win.text()+msg.msg+"\n");
            //$("#code_pre").addClass("sh");
            hljs.initHighlighting.called = false;
            hljs.initHighlighting();

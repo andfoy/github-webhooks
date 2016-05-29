@@ -43,21 +43,20 @@ class HookHandler(tornado.web.RequestHandler):
            correct = False
         if correct:
            data = tornado.escape.json_decode(self.request.body)
+           os.system('echo "(%s) Downloading repository latest revision..." >> output.log' % (data['repository']['name']))
            try:
               script = self.repos[data['repository']['name']]
+              os.system('cd '+script+' && git pull >> /root/webhooks/output.log 2>> /root/webhooks/err.log')
            except KeyError:
               url = data['repository']['ssh_url']
-              os.system("cd /root && git clone "+url)
+              os.system("cd /root && git clone "+url+" >> /root/webhooks/output.log 2>> /root/webhooks/err.log")
               script = '/root/'+data['repository']['name']
               self.repos[data['repository']['name']] = script
               self.update_repository_list(data['repository']['name'], script)
-           os.system('chmod 777 '+script)
-           os.system('cd '+script+' && pwd && ./deploy.sh')
+           os.system('cd '+script+' && chmod 777 '+script+'/deploy.sh')
+           os.system('cd '+script+' && ./deploy.sh >> /root/webhooks/output.log 2>> /root/webhooks/err.log')
 
     def verify_signature(self, key, msg):
         key1 = hmac.HMAC(self.application.signature, msg, self.digestmod).hexdigest()
         key = key[5:]
         return sum(i != j for i, j in zip(key1, key)) == 0
-
-
-

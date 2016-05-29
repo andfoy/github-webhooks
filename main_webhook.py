@@ -20,7 +20,6 @@ def main():
      print "Webhook secret variable must be defined in the current environment"
      sys.exit(-1)
   secret = base64.b64decode(secret)
-  repos = {'DuckIt-Backend':'/root/DuckIt-Backend/deploy.sh'}
   application = tornado.web.Application([(r"/", webhook.HookHandler),
               (r"/log", websocket_handler.WebSocketHandler)],
               debug=True, serve_traceback=True, autoreload=True)
@@ -29,7 +28,6 @@ def main():
   log_mon = log.LogMonitor()
   application.log_mon = log_mon
   application.signature = secret
-  application.repos = repos
   application.listen(8000)
   try:
     ioloop.start()
